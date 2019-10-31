@@ -24,7 +24,7 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['ktjhan', 'crutledgedev', 'zimashima', 'WalterTheCodeGuy', 'AJWD92'];
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -53,3 +53,79 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+function gitHubComponent(arg) {
+
+  // define elements
+  const card = document.createElement('div'),
+        userImg = document.createElement('img'),
+        cardInfo = document.createElement('div'),
+        name = document.createElement('h3'),
+        userName = document.createElement('p'),
+        location = document.createElement('p'),
+        profile = document.createElement('p'),
+        usersPage = document.createElement('A'),
+        followers = document.createElement('p'),
+        following = document.createElement('p'),
+        bio = document.createElement('p');
+
+
+  // append elements
+  card.appendChild(userImg);
+  card.appendChild(cardInfo);
+  cardInfo.appendChild(name);
+  cardInfo.appendChild(userName);
+  cardInfo.appendChild(location);
+  cardInfo.appendChild(profile);
+  cardInfo.appendChild(followers);
+  cardInfo.appendChild(following);
+  cardInfo.appendChild(bio);
+
+
+  // add classes
+  card.classList.add('card');
+  cardInfo.classList.add('card-info');
+  name.classList.add('name');
+  userName.classList.add('username');
+
+
+  // add attributes
+  userImg.src = arg.avatar_url;
+  name.textContent = arg.name;
+  userName.textContent = arg.login;
+  location.textContent = `Location: ${arg.location}`;
+  profile.textContent = `Profile: `;
+  usersPage.textContent = arg.html_url;
+  usersPage.href = arg.html_url;
+  profile.appendChild(usersPage);
+  followers.textContent = `Followers: ${arg.followers}`;
+  following.textContent = `Following: ${arg.following}`;
+  bio.textContent = `Bio: ${arg.bio}`;
+
+
+  return card;
+
+};
+
+const cards = document.querySelector('.cards');
+
+axios
+  .get('https://api.github.com/users/Courtland-Bourgeois')
+  .then(response => {
+    // console.log(response)
+    cards.appendChild(gitHubComponent(response.data));
+  })
+  .catch(err => {
+    console.log(err)
+  })
+
+  followersArray.forEach( item => {
+    axios
+      .get(`https://api.github.com/users/${item}`)
+      .then( response => {
+        cards.appendChild(gitHubComponent(response.data));
+      })
+      .catch(err => {
+        console.log(err)
+  })
+})
